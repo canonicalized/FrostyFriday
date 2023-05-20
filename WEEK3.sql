@@ -22,17 +22,12 @@ FROM @S3_FF_WEEK3/keywords.csv
 
 -- place the keywords in a temp table
 CREATE OR REPLACE TEMPORARY TABLE KEYWORDS_TMP (KEYWORD VARCHAR);
-
 COPY INTO KEYWORDS_TMP
 FROM (
     SELECT $1 FROM @S3_FF_WEEK3/keywords.csv
     (FILE_FORMAT => 'CSV_FORMAT_H1')
 );
 SELECT * FROM KEYWORDS_TMP;
-
-
-SELECT array_agg(KEYWORD) FROM KEYWORDS_TMP;
-
 
 -- Create the table to store the metadata
 CREATE OR REPLACE TABLE WEEK3 (
