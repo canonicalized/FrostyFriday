@@ -1,0 +1,27 @@
+USE DATABASE FROSTYFRIDAY;
+USE SCHEMA CHALLENGES;
+
+CREATE OR REPLACE TABLE WEEK5 (
+  number INT
+);
+
+INSERT INTO WEEK5 (number)
+SELECT ABS(RANDOM()) % 100 AS number
+FROM TABLE(GENERATOR(ROWCOUNT => 10));
+
+SELECT * FROM WEEK5;
+
+
+CREATE OR REPLACE FUNCTION timesthree(number INT)
+RETURNS INT
+LANGUAGE PYTHON
+RUNTIME_VERSION = '3.9'
+HANDLER = 'main'
+AS 
+$$
+def main(number):
+    return number * 3
+$$;
+
+SELECT number, timesthree(number) AS multiplied_number
+FROM WEEK5;
