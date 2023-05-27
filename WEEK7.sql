@@ -118,22 +118,6 @@ select * from week7_weapon_storage_location;
 
 
 
-SELECT 
-  event_timestamp,
-  user_name,
-  database_name,
-  schema_name,
-  object_name,
-  action
-FROM 
-  snowflake.account_usage.access_history
-WHERE 
-  object_tag ILIKE '%Level Super Secret A+++++++'
-  AND action IN ('SELECT', 'INSERT', 'UPDATE', 'DELETE')
-ORDER BY 
-  event_timestamp DESC;
-
-
 WITH access_hist AS (
   select query_id
        , user_name
