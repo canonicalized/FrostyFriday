@@ -50,10 +50,11 @@ SELECT DISTINCT REACTION as emoji, emoji_to_text(REACTION) as emoji_text FROM WE
 SELECT * FROM WEEK56_EMOJIS;
 
 
--- CREATE OR REPLACE NOTIFICATION INTEGRATION EMAIL_NOTIFICATION_INTEGRATION
---     TYPE=EMAIL
---     ENABLED=TRUE
---     ALLOWED_RECIPIENTS=('email@domain.com');
+CREATE OR REPLACE NOTIFICATION INTEGRATION EMAIL_NOTIFICATION_INTEGRATION
+    TYPE=EMAIL
+    ENABLED=TRUE
+    ALLOWED_RECIPIENTS=('email@domain.com');
+GRANT USAGE ON INTEGRATION EMAIL_NOTIFICATION_INTEGRATION TO ROLE SYSADMI;
     
 -- Create the alert
 create or replace alert ALERT_NEW_EMOJI
@@ -76,13 +77,18 @@ then
   )
 ;
 
+call SYSTEM$SEND_EMAIL (
+    'EMAIL_NOTIFICATION_INTEGRATION',
+    'email@domain.com',
+    'test',
+    'test'
+  );
 -- Describe the alert
 desc alert ALERT_NEW_EMOJI;
 
 -- Activate the alert, requiring the EXECUTE ALERT privilege on the account
 GRANT EXECUTE ALERT ON ACCOUNT TO ROLE SYSADMIN; -- run as ACCOUNTADMIN
 alter alert ALERT_NEW_EMOJI resume;
-
 
 
 -- Monitor the history of alerts sent
@@ -94,4 +100,4 @@ order by SCHEDULED_TIME desc
 ;
 
 -- Disable the alert to avoid the inevitable spam going forwards
-alter alert ALERT_CH_LONG_RUNNING_QUERIES suspend;
+alter alert ALERT_NEW_EMOJI suspend;
